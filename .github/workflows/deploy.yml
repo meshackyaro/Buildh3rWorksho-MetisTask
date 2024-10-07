@@ -1,0 +1,21 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Deploy
+      run: |
+        curl -X POST \
+        -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        -H "Content-Type: application/json" \
+        -d '{"ref": "main", "environment": "production"}' \
+        https://api.github.com/repos/${{ github.repository }}/deployments
